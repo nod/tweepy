@@ -142,8 +142,15 @@ def bind_api(**config):
                     )
 
                 # Execute request
+                if not self.post_data and 'Content-Length' not in self.headers:
+                    self.headers['Content-Length'] = 0
                 try:
-                    conn.request(self.method, url, headers=self.headers, body=self.post_data)
+                    conn.request(
+                        self.method,
+                        url,
+                        headers=self.headers,
+                        body=self.post_data
+                        )
                     resp = conn.getresponse()
                 except Exception, e:
                     raise TweepError('Failed to send request: %s' % e)
